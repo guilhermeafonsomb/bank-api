@@ -20,4 +20,8 @@ export class UserRepository {
       where: { cpf },
     });
   }
+
+  async findAll() {
+    return this.prisma.user.findMany();
+  }
 }
