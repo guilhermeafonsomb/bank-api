@@ -32,4 +32,8 @@ export class AccountService {
     }
     return this.accountRepository.withdraw(id, amount);
   }
+
+  async findAllByUser(userId: string): Promise<Account[]> {
+    return this.accountRepository.findByUserId(userId);
+  }
 }

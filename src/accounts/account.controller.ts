@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Param } from '@nestjs/common';
+import { Controller, Post, Body, Param, Get } from '@nestjs/common';
 import { AccountService } from './account.service';
 import { CreateAccountDto } from './dtos/create-account.dto';
 import { AddBalanceDto } from './dtos/add-balance.dto';
@@ -14,7 +14,7 @@ export class AccountController {
     return this.accountService.create(createAccountDto);
   }
 
-  @Post(':id/add-balance')
+  @Post('add-balance/:id')
   async addBalance(
     @Param('id') id: string,
     @Body() addBalanceDto: AddBalanceDto,
@@ -22,8 +22,13 @@ export class AccountController {
     return this.accountService.addBalance(id, addBalanceDto.amount);
   }
 
-  @Post(':id/withdraw')
+  @Post('withdraw/:id')
   async withdraw(@Param('id') id: string, @Body() withdrawDto: WithdrawDto) {
     return this.accountService.withdraw(id, withdrawDto.amount);
+  }
+
+  @Get('/:userId')
+  async findAllByUser(@Param('userId') userId: string) {
+    return this.accountService.findAllByUser(userId);
   }
 }

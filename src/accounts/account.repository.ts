@@ -50,4 +50,10 @@ export class AccountRepository {
       },
     });
   }
+
+  async findByUserId(userId: string): Promise<Account[]> {
+    return this.prisma.account.findMany({
+      where: { userId },
+    });
+  }
 }
