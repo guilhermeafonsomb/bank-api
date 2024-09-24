@@ -29,6 +29,8 @@ model Transaction {
   toAccount     String
   amount        Float
   createdAt     DateTime @default(now())
+  userId        String
+  type          String
 
   Account Account[]
 }

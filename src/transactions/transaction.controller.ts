@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Query } from '@nestjs/common';
+import { Controller, Post, Body, Get, Query, Param } from '@nestjs/common';
 import { CreateTransactionDto } from './dtos/create-transaction.dto';
 import { FilterTransactionsDto } from './dtos/filter-transactions.dto';
 import { TransactionService } from './transaction.service';
@@ -12,8 +12,11 @@ export class TransactionController {
     return this.transactionService.create(transactionDto);
   }
 
-  @Get()
-  async findAll(@Query() filterDto: FilterTransactionsDto) {
-    return this.transactionService.findAll(filterDto);
+  @Get('user/:userId')
+  async findAllByUser(
+    @Param('userId') userId: string,
+    @Query() filterDto: FilterTransactionsDto,
+  ) {
+    return this.transactionService.findAllByUser(userId, filterDto);
   }
 }

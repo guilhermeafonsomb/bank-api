@@ -5,4 +5,5 @@ export class FilterTransactionsDto {
   maxAmount?: number;
   startDate?: Date;
   endDate?: Date;
+  type?: 'deposit' | 'withdraw' | 'transferSent' | 'transferReceived';
 }

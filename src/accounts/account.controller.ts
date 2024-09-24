@@ -14,7 +14,7 @@ export class AccountController {
     return this.accountService.create(createAccountDto);
   }
 
-  @Post('add-balance/:id')
+  @Post(':id/add-balance')
   async addBalance(
     @Param('id') id: string,
     @Body() addBalanceDto: AddBalanceDto,
@@ -22,12 +22,12 @@ export class AccountController {
     return this.accountService.addBalance(id, addBalanceDto.amount);
   }
 
-  @Post('withdraw/:id')
+  @Post(':id/withdraw')
   async withdraw(@Param('id') id: string, @Body() withdrawDto: WithdrawDto) {
     return this.accountService.withdraw(id, withdrawDto.amount);
   }
 
-  @Get('/:userId')
+  @Get('user/:userId')
   async findAllByUser(@Param('userId') userId: string) {
     return this.accountService.findAllByUser(userId);
   }
