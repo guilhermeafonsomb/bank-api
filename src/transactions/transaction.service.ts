@@ -2,6 +2,7 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { CreateTransactionDto } from './dtos/create-transaction.dto';
 import { TransactionRepository } from './transaction.repository';
 import { AccountRepository } from 'src/accounts/account.repository';
+import { TransactionFilterDto } from './dtos/filter-transactions.dto';
 
 @Injectable()
 export class TransactionService {
@@ -70,15 +71,13 @@ export class TransactionService {
     }
   }
 
-  async findAllByUserId(userId: string) {
-    const transactions =
-      await this.transactionRepository.findAllByUserId(userId);
-    return transactions.map((transaction) => ({
-      amount: transaction.amount,
-      fromAccountName: transaction.fromAccount,
-      toAccountName: transaction.toAccount,
-      type: transaction.type,
-      createdAt: transaction.createdAt,
-    }));
+  async findAllByUserIdWithFilters(
+    userId: string,
+    filters: TransactionFilterDto,
+  ) {
+    return this.transactionRepository.findAllByUserIdWithFilters(
+      userId,
+      filters,
+    );
   }
 }
