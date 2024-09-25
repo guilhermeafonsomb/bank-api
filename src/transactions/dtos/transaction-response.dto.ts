@@ -3,4 +3,5 @@ export class TransactionResponseDto {
   fromAccountName: string;
   toAccountName?: string;
   type: 'transferSent' | 'transferReceived';
+  createdAt: Date;
 }

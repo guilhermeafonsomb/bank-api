@@ -1,6 +1,5 @@
-import { Controller, Post, Body, Get, Query, Param } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param } from '@nestjs/common';
 import { CreateTransactionDto } from './dtos/create-transaction.dto';
-import { FilterTransactionsDto } from './dtos/filter-transactions.dto';
 import { TransactionService } from './transaction.service';
 
 @Controller('transactions')
@@ -13,10 +12,7 @@ export class TransactionController {
   }
 
   @Get('user/:userId')
-  async findAllByUser(
-    @Param('userId') userId: string,
-    @Query() filterDto: FilterTransactionsDto,
-  ) {
-    return this.transactionService.findAllByUser(userId, filterDto);
+  async findAllByUserId(@Param('userId') userId: string) {
+    return this.transactionService.findAllByUserId(userId);
   }
 }

@@ -1,9 +1,7 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { CreateTransactionDto } from './dtos/create-transaction.dto';
-import { FilterTransactionsDto } from './dtos/filter-transactions.dto';
 import { TransactionRepository } from './transaction.repository';
 import { AccountRepository } from 'src/accounts/account.repository';
-import { TransactionResponseDto } from './dtos/transaction-response.dto';
 
 @Injectable()
 export class TransactionService {
@@ -72,44 +70,15 @@ export class TransactionService {
     }
   }
 
-  async findAll(filterDto: FilterTransactionsDto) {
-    return this.transactionRepository.findAll(filterDto);
-  }
-
-  async findAllByUser(
-    userId: string,
-    filterDto: FilterTransactionsDto,
-  ): Promise<TransactionResponseDto[]> {
-    const transactions = await this.transactionRepository.findAllByUser(
-      userId,
-      filterDto,
-    );
-
-    return Promise.all(
-      transactions.map(async (transaction) => {
-        let transactionType: 'transferSent' | 'transferReceived';
-
-        if (transaction.type === 'transferSent') {
-          transactionType = 'transferSent';
-        } else if (transaction.type === 'transferReceived') {
-          transactionType = 'transferReceived';
-        }
-
-        return {
-          amount: transaction.amount,
-          fromAccountName: await this.getAccountName(transaction.fromAccount),
-          toAccountName: transaction.toAccount
-            ? await this.getAccountName(transaction.toAccount)
-            : undefined,
-          type: transactionType,
-          createdAt: transaction.createdAt,
-        };
-      }),
-    );
-  }
-
-  private async getAccountName(accountId: string): Promise<string> {
-    const account = await this.accountRepository.findById(accountId);
-    return account?.name || 'Conta não encontrada';
+  async findAllByUserId(userId: string) {
+    const transactions =
+      await this.transactionRepository.findAllByUserId(userId);
+    return transactions.map((transaction) => ({
+      amount: transaction.amount,
+      fromAccountName: transaction.fromAccount,
+      toAccountName: transaction.toAccount,
+      type: transaction.type,
+      createdAt: transaction.createdAt,
+    }));
   }
 }

@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTransactionDto } from './dtos/create-transaction.dto';
-import { FilterTransactionsDto } from './dtos/filter-transactions.dto';
 import { PrismaService } from 'prisma/prisma.service';
-import { Transaction } from '@prisma/client';
 
 @Injectable()
 export class TransactionRepository {
@@ -20,49 +18,11 @@ export class TransactionRepository {
     });
   }
 
-  async findAll(filterDto: FilterTransactionsDto) {
-    const { fromAccount, toAccount, minAmount, maxAmount, startDate, endDate } =
-      filterDto;
-
+  async findAllByUserId(userId: string) {
     return this.prisma.transaction.findMany({
       where: {
-        ...(fromAccount && { fromAccount }),
-        ...(toAccount && { toAccount }),
-        ...(minAmount && { amount: { gte: minAmount } }),
-        ...(maxAmount && { amount: { lte: maxAmount } }),
-        ...(startDate && { createdAt: { gte: startDate } }),
-        ...(endDate && { createdAt: { lte: endDate } }),
+        userId: userId,
       },
     });
-  }
-
-  async findAllByUser(
-    userId: string,
-    filterDto: FilterTransactionsDto,
-  ): Promise<Transaction[]> {
-    const {
-      fromAccount,
-      toAccount,
-      minAmount,
-      maxAmount,
-      startDate,
-      endDate,
-      type,
-    } = filterDto;
-
-    const transactions = await this.prisma.transaction.findMany({
-      where: {
-        userId,
-        ...(fromAccount && { fromAccount }),
-        ...(toAccount && { toAccount }),
-        ...(minAmount && { amount: { gte: minAmount } }),
-        ...(maxAmount && { amount: { lte: maxAmount } }),
-        ...(startDate && { createdAt: { gte: startDate } }),
-        ...(endDate && { createdAt: { lte: endDate } }),
-        ...(type && { type }),
-      },
-    });
-
-    return transactions;
   }
 }
