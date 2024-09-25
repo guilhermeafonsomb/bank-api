@@ -16,7 +16,9 @@ export class TransactionService {
     const { fromAccount, toAccount, amount } = transactionDto;
 
     if (amount <= 0) {
-      throw new BadRequestException('O valor deve ser positivo para depósitos');
+      throw new BadRequestException(
+        'O valor deve ser positivo para transferências',
+      );
     }
 
     const fromAccountData = await this.accountRepository.findById(fromAccount);
@@ -29,45 +31,45 @@ export class TransactionService {
       if (!toAccountData) {
         throw new BadRequestException('Conta destinatária não encontrada');
       }
-    }
 
-    if (toAccount) {
+      if (fromAccountData.userId !== transactionDto.userId) {
+        throw new BadRequestException(
+          'Você não pode retirar valores de contas que não lhe pertencem',
+        );
+      }
+
       if (fromAccountData.balance < amount) {
         throw new BadRequestException('Saldo insuficiente para transferência');
       }
-    } else if (fromAccountData.balance < amount) {
-      throw new BadRequestException('Saldo insuficiente para saque');
-    }
 
-    if (toAccount) {
-      await this.accountRepository.addBalance(toAccount, amount);
-    }
-
-    if (amount > 0) {
       await this.accountRepository.withdraw(fromAccount, amount);
-    }
 
-    let transactionType:
-      | 'deposit'
-      | 'withdraw'
-      | 'transferSent'
-      | 'transferReceived';
+      await this.accountRepository.addBalance(toAccount, amount);
 
-    if (toAccount) {
-      transactionType = 'transferSent';
-    } else if (amount < 0) {
-      transactionType = 'withdraw';
+      await this.transactionRepository.create({
+        fromAccount,
+        toAccount,
+        amount,
+        userId: fromAccountData.userId,
+        type: 'transferSent',
+      });
+
+      await this.transactionRepository.create({
+        fromAccount: fromAccount,
+        toAccount: toAccount,
+        amount,
+        userId: toAccountData.userId,
+        type: 'transferReceived',
+      });
+
+      return {
+        message: 'Transferência realizada com sucesso',
+      };
     } else {
-      transactionType = 'deposit';
+      throw new BadRequestException(
+        'Conta destinatária é necessária para transferências',
+      );
     }
-
-    return this.transactionRepository.create({
-      fromAccount,
-      toAccount,
-      amount,
-      userId: fromAccountData.userId,
-      type: transactionType,
-    });
   }
 
   async findAll(filterDto: FilterTransactionsDto) {
@@ -108,6 +110,7 @@ export class TransactionService {
             ? await this.getAccountName(transaction.toAccount)
             : undefined,
           type: transactionType,
+          createdAt: transaction.createdAt,
         };
       }),
     );

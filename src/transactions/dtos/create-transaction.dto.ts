@@ -3,5 +3,5 @@ export class CreateTransactionDto {
   toAccount?: string;
   amount: number;
   userId: string;
-  type: 'deposit' | 'withdraw' | 'transferSent' | 'transferReceived';
+  type: 'transferSent' | 'transferReceived';
 }

@@ -50,7 +50,7 @@ export class TransactionRepository {
       type,
     } = filterDto;
 
-    return this.prisma.transaction.findMany({
+    const transactions = await this.prisma.transaction.findMany({
       where: {
         userId,
         ...(fromAccount && { fromAccount }),
@@ -62,5 +62,7 @@ export class TransactionRepository {
         ...(type && { type }),
       },
     });
+
+    return transactions;
   }
 }

@@ -3,7 +3,7 @@ services:
   api:
     build: .
     ports:
-      - '3001:3001' # API rodando na porta 3001 do host
+      - '3000:3000' # API rodando na porta 3000 do host
     depends_on:
       - postgres
     environment:
