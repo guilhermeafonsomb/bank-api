@@ -87,20 +87,12 @@ export class TransactionService {
 
     return Promise.all(
       transactions.map(async (transaction) => {
-        let transactionType:
-          | 'deposit'
-          | 'withdraw'
-          | 'transferSent'
-          | 'transferReceived';
+        let transactionType: 'transferSent' | 'transferReceived';
 
         if (transaction.type === 'transferSent') {
           transactionType = 'transferSent';
         } else if (transaction.type === 'transferReceived') {
           transactionType = 'transferReceived';
-        } else if (transaction.type === 'withdraw') {
-          transactionType = 'withdraw';
-        } else {
-          transactionType = 'deposit';
         }
 
         return {
