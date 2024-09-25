@@ -9,9 +9,10 @@ import { AccountService } from './accounts/account.service';
 import { TransactionController } from './transactions/transaction.controller';
 import { TransactionRepository } from './transactions/transaction.repository';
 import { TransactionService } from './transactions/transaction.service';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [],
+  imports: [ConfigModule.forRoot()],
   controllers: [AccountController, TransactionController, UserController],
   providers: [
     AccountService,
