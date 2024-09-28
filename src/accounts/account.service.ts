@@ -37,15 +37,12 @@ export class AccountService {
     return this.accountRepository.findByUserId(userId);
   }
 
-  async editAccount(
-    id: string,
-    accountName: string,
-  ): Promise<CreateAccountDto> {
-    return await this.accountRepository.editAccount(id, accountName);
+  async editAccount(accountId: string, accountName: string): Promise<Account> {
+    return await this.accountRepository.editAccount(accountId, accountName);
   }
 
-  async deleteAccount(id: string): Promise<Account> {
-    const account = await await this.accountRepository.findById(id);
+  async deleteAccount(accountId: string): Promise<Account> {
+    const account = await await this.accountRepository.findById(accountId);
 
     if (!account) {
       throw new BadRequestException('Account not found');
@@ -55,6 +52,6 @@ export class AccountService {
       throw new BadRequestException('Account need have balance equal to 0');
     }
 
-    return await this.accountRepository.deleteAccount(id);
+    return await this.accountRepository.deleteAccount(accountId);
   }
 }

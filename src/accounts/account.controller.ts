@@ -12,6 +12,7 @@ import { CreateAccountDto } from './dtos/create-account.dto';
 import { AddBalanceDto } from './dtos/add-balance.dto';
 import { WithdrawDto } from './dtos/withdraw.dto';
 import { Account } from './entities/account.entity';
+import { UpdateAccountDto } from './dtos/update-account.dto';
 
 @Controller('accounts')
 export class AccountController {
@@ -40,13 +41,16 @@ export class AccountController {
     return this.accountService.findAllByUser(userId);
   }
 
-  @Put(':id')
-  async editAccount(@Param('id') id: string, @Body() accountName: string) {
-    return this.accountService.editAccount(id, accountName);
+  @Put(':accountId')
+  async editAccount(
+    @Param('accountId') accountId: string,
+    @Body() updateAccountDto: UpdateAccountDto,
+  ) {
+    return this.accountService.editAccount(accountId, updateAccountDto.name);
   }
 
-  @Delete(':id')
-  async deleteAccount(@Param('id') id: string) {
-    return this.accountService.deleteAccount(id);
+  @Delete(':accountId')
+  async deleteAccount(@Param('accountId') accountId: string) {
+    return this.accountService.deleteAccount(accountId);
   }
 }
