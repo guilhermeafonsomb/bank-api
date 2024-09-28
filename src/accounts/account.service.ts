@@ -41,10 +41,20 @@ export class AccountService {
     id: string,
     accountName: string,
   ): Promise<CreateAccountDto> {
-    return this.accountRepository.editAccount(id, accountName);
+    return await this.accountRepository.editAccount(id, accountName);
   }
 
   async deleteAccount(id: string): Promise<Account> {
-    return this.accountRepository.deleteAccount(id);
+    const account = await await this.accountRepository.findById(id);
+
+    if (!account) {
+      throw new BadRequestException('Account not found');
+    }
+
+    if (account.balance > 0) {
+      throw new BadRequestException('Account need have balance equal to 0');
+    }
+
+    return await this.accountRepository.deleteAccount(id);
   }
 }
