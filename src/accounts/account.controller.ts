@@ -1,4 +1,12 @@
-import { Controller, Post, Body, Param, Get } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Param,
+  Get,
+  Put,
+  Delete,
+} from '@nestjs/common';
 import { AccountService } from './account.service';
 import { CreateAccountDto } from './dtos/create-account.dto';
 import { AddBalanceDto } from './dtos/add-balance.dto';
@@ -30,5 +38,15 @@ export class AccountController {
   @Get('user/:userId')
   async findAllByUser(@Param('userId') userId: string) {
     return this.accountService.findAllByUser(userId);
+  }
+
+  @Put(':id')
+  async editAccount(@Param('id') id: string, @Body() accountName: string) {
+    return this.accountService.editAccount(id, accountName);
+  }
+
+  @Delete(':id')
+  async deleteAccount(@Param('id') id: string) {
+    return this.accountService.deleteAccount(id);
   }
 }

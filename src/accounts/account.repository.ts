@@ -56,4 +56,22 @@ export class AccountRepository {
       where: { userId },
     });
   }
+
+  async editAccount(
+    id: string,
+    accountName: string,
+  ): Promise<CreateAccountDto> {
+    return this.prisma.account.update({
+      where: { id },
+      data: {
+        name: accountName,
+      },
+    });
+  }
+
+  async deleteAccount(id: string): Promise<Account> {
+    return this.prisma.account.delete({
+      where: { id },
+    });
+  }
 }

@@ -36,4 +36,15 @@ export class AccountService {
   async findAllByUser(userId: string): Promise<Account[]> {
     return this.accountRepository.findByUserId(userId);
   }
+
+  async editAccount(
+    id: string,
+    accountName: string,
+  ): Promise<CreateAccountDto> {
+    return this.accountRepository.editAccount(id, accountName);
+  }
+
+  async deleteAccount(id: string): Promise<Account> {
+    return this.accountRepository.deleteAccount(id);
+  }
 }
