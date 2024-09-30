@@ -23,7 +23,7 @@ export class AccountController {
     return this.accountService.create(createAccountDto);
   }
 
-  @Put(':id/add-balance')
+  @Put(':id/deposit')
   async addBalance(
     @Param('id') id: string,
     @Body() addBalanceDto: AddBalanceDto,
