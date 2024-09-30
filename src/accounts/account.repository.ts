@@ -73,12 +73,9 @@ export class AccountRepository {
   }
 
   async findAccountByName(accountName: string) {
-    return this.prisma.account.findMany({
+    return this.prisma.account.findUnique({
       where: {
-        name: {
-          contains: accountName,
-          mode: 'insensitive',
-        },
+        name: accountName,
       },
       select: {
         id: true,
