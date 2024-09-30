@@ -53,4 +53,9 @@ export class AccountController {
   async deleteAccount(@Param('accountId') accountId: string) {
     return this.accountService.deleteAccount(accountId);
   }
+
+  @Get('name/:accountName')
+  async findAccountByName(@Param('accountName') accountName: string) {
+    return this.accountService.findAccountByName(accountName);
+  }
 }

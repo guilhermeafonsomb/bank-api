@@ -25,6 +25,10 @@ export class AccountService {
     return this.accountRepository.addBalance(id, amount);
   }
 
+  async findAccountByName(accountName: string) {
+    return this.accountRepository.findAccountByName(accountName);
+  }
+
   async withdraw(id: string, amount: number): Promise<Account> {
     const account = await this.accountRepository.findById(id);
     if (account.balance < amount) {

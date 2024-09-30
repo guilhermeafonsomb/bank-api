@@ -71,4 +71,19 @@ export class AccountRepository {
       where: { id },
     });
   }
+
+  async findAccountByName(accountName: string) {
+    return this.prisma.account.findMany({
+      where: {
+        name: {
+          contains: accountName,
+          mode: 'insensitive',
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+  }
 }
