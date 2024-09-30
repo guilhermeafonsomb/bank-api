@@ -34,7 +34,7 @@ export class AccountRepository {
       where: { id },
       data: {
         balance: {
-          increment: amount,
+          increment: Number(amount),
         },
       },
     });
@@ -45,7 +45,7 @@ export class AccountRepository {
       where: { id },
       data: {
         balance: {
-          decrement: amount,
+          decrement: Number(amount),
         },
       },
     });
