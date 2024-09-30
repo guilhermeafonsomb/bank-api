@@ -75,8 +75,35 @@ export class TransactionRepository {
       whereClause.type = type;
     }
 
-    return this.prisma.transaction.findMany({
+    const transactions = await this.prisma.transaction.findMany({
       where: whereClause,
     });
+
+    const transactionsWithNames = await Promise.all(
+      transactions.map(async (transaction) => {
+        const fromAccountName = await this.prisma.account.findUnique({
+          where: { id: transaction.fromAccount },
+          select: { name: true },
+        });
+
+        const toAccountName = transaction.toAccount
+          ? await this.prisma.account.findUnique({
+              where: { id: transaction.toAccount },
+              select: { name: true },
+            })
+          : null;
+
+        return {
+          id: transaction.id,
+          fromAccountName: fromAccountName?.name,
+          toAccountName: toAccountName?.name || null,
+          amount: transaction.amount,
+          createdAt: transaction.createdAt,
+          type: transaction.type,
+        };
+      }),
+    );
+
+    return transactionsWithNames;
   }
 }
