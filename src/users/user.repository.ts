@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { User } from './entities/user.entity';
-import { PrismaService } from 'prisma/prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class UserRepository {
@@ -23,5 +23,11 @@ export class UserRepository {
 
   async findAll() {
     return this.prisma.user.findMany();
+  }
+
+  async delete(id: string) {
+    return this.prisma.user.delete({
+      where: { id },
+    });
   }
 }

@@ -35,4 +35,12 @@ export class UserService {
       throw new BadRequestException('Erro ao buscar usuários');
     }
   }
+
+  async delete(id: string) {
+    try {
+      return await this.userRepository.delete(id);
+    } catch (error: unknown) {
+      throw new BadRequestException('Erro ao deletar usuário');
+    }
+  }
 }

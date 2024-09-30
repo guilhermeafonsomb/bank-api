@@ -1,7 +1,7 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { CreateTransactionDto } from './dtos/create-transaction.dto';
 import { TransactionRepository } from './transaction.repository';
-import { AccountRepository } from 'src/accounts/account.repository';
+import { AccountRepository } from '../accounts/account.repository';
 import { TransactionFilterDto } from './dtos/filter-transactions.dto';
 
 @Injectable()
