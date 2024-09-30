@@ -77,6 +77,7 @@ export class TransactionRepository {
 
     const transactions = await this.prisma.transaction.findMany({
       where: whereClause,
+      orderBy: { createdAt: 'desc' },
     });
 
     const transactionsWithNames = await Promise.all(
