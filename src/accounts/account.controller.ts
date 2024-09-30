@@ -20,7 +20,7 @@ export class AccountController {
 
   @Post()
   async create(@Body() createAccountDto: CreateAccountDto): Promise<Account> {
-    return this.accountService.create(createAccountDto);
+    return await this.accountService.create(createAccountDto);
   }
 
   @Put(':id/deposit')
@@ -28,17 +28,17 @@ export class AccountController {
     @Param('id') id: string,
     @Body() addBalanceDto: AddBalanceDto,
   ) {
-    return this.accountService.addBalance(id, addBalanceDto.amount);
+    return await this.accountService.addBalance(id, addBalanceDto.amount);
   }
 
   @Put(':id/withdraw')
   async withdraw(@Param('id') id: string, @Body() withdrawDto: WithdrawDto) {
-    return this.accountService.withdraw(id, withdrawDto.amount);
+    return await this.accountService.withdraw(id, withdrawDto.amount);
   }
 
   @Get('user/:userId')
   async findAllByUser(@Param('userId') userId: string) {
-    return this.accountService.findAllByUser(userId);
+    return await this.accountService.findAllByUser(userId);
   }
 
   @Put(':accountId')
@@ -46,16 +46,19 @@ export class AccountController {
     @Param('accountId') accountId: string,
     @Body() updateAccountDto: UpdateAccountDto,
   ) {
-    return this.accountService.editAccount(accountId, updateAccountDto.name);
+    return await this.accountService.editAccount(
+      accountId,
+      updateAccountDto.name,
+    );
   }
 
   @Delete(':accountId')
   async deleteAccount(@Param('accountId') accountId: string) {
-    return this.accountService.deleteAccount(accountId);
+    return await this.accountService.deleteAccount(accountId);
   }
 
   @Get('name/:accountName')
   async findAccountByName(@Param('accountName') accountName: string) {
-    return this.accountService.findAccountByName(accountName);
+    return await this.accountService.findAccountByName(accountName);
   }
 }

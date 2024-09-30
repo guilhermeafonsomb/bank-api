@@ -4,7 +4,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { AccountRepository } from './account.repository';
-import { Account } from './entities/account.entity';
+import { Account, AccountByName } from './entities/account.entity';
 import { CreateAccountDto } from './dtos/create-account.dto';
 
 @Injectable()
@@ -25,8 +25,14 @@ export class AccountService {
     return this.accountRepository.addBalance(id, amount);
   }
 
-  async findAccountByName(accountName: string) {
-    return this.accountRepository.findAccountByName(accountName);
+  async findAccountByName(accountName: string): Promise<AccountByName | null> {
+    const account = await this.accountRepository.findAccountByName(accountName);
+
+    if (!account) {
+      throw new BadRequestException('Conta não existe');
+    }
+
+    return account;
   }
 
   async withdraw(id: string, amount: number): Promise<Account> {

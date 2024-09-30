@@ -53,7 +53,7 @@ export class TransactionService {
         type: 'transferSent',
       });
 
-      await this.transactionRepository.create({
+      const transferSend = await this.transactionRepository.create({
         fromAccount: fromAccount,
         toAccount: toAccount,
         amount,
@@ -61,9 +61,7 @@ export class TransactionService {
         type: 'transferReceived',
       });
 
-      return {
-        message: 'Transferência realizada com sucesso',
-      };
+      return transferSend;
     } else {
       throw new BadRequestException(
         'Conta destinatária é necessária para transferências',

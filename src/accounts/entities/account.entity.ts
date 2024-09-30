@@ -4,3 +4,8 @@ export class Account {
   balance: number;
   userId: string;
 }
+
+export class AccountByName {
+  name: string;
+  id: string;
+}
