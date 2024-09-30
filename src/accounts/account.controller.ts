@@ -23,7 +23,7 @@ export class AccountController {
     return this.accountService.create(createAccountDto);
   }
 
-  @Post(':id/add-balance')
+  @Put(':id/add-balance')
   async addBalance(
     @Param('id') id: string,
     @Body() addBalanceDto: AddBalanceDto,
@@ -31,7 +31,7 @@ export class AccountController {
     return this.accountService.addBalance(id, addBalanceDto.amount);
   }
 
-  @Post(':id/withdraw')
+  @Put(':id/withdraw')
   async withdraw(@Param('id') id: string, @Body() withdrawDto: WithdrawDto) {
     return this.accountService.withdraw(id, withdrawDto.amount);
   }
