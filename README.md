@@ -37,6 +37,9 @@ $ npm install
 ```bash
 # development
 $ npm run start
+$ npx prisma migrate dev
+$ docker-compose up -d
+$ npm run start:dev
 
 # watch mode
 $ npm run start:dev
