@@ -38,7 +38,7 @@ describe('Accounts E2E Tests', () => {
 
   it('Should create account', async () => {
     const createAccountDto: CreateAccountDto = {
-      name: 'Conta Teste',
+      name: `Conta Teste ${Date.now()}`, // Nome dinâmico
       userId: userId,
     };
 
@@ -48,14 +48,14 @@ describe('Accounts E2E Tests', () => {
       .expect(201)
       .then((response) => {
         expect(response.body).toHaveProperty('id');
-        expect(response.body.name).toEqual('Conta Teste');
+        expect(response.body.name).toEqual(createAccountDto.name);
         expect(response.body.balance).toEqual(0);
       });
   });
 
   it('Should add balance to account', async () => {
     const createAccountDto: CreateAccountDto = {
-      name: 'Conta para Depósito',
+      name: `Conta para Depósito ${Date.now()}`, // Nome dinâmico
       userId: userId,
     };
 
@@ -77,9 +77,9 @@ describe('Accounts E2E Tests', () => {
       });
   });
 
-  it('Should withdraw to account', async () => {
+  it('Should withdraw from account', async () => {
     const createAccountDto: CreateAccountDto = {
-      name: 'Conta para Saque',
+      name: `Conta para Saque ${Date.now()}`, // Nome dinâmico
       userId: userId,
     };
 
