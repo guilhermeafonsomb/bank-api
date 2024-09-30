@@ -45,6 +45,10 @@ export class TransactionService {
 
       await this.accountRepository.addBalance(toAccount, amount);
 
+      const fromAccountName =
+        await this.accountRepository.findById(fromAccount);
+      const toAccountName = await this.accountRepository.findById(toAccount);
+
       await this.transactionRepository.create({
         fromAccount,
         toAccount,
@@ -54,8 +58,8 @@ export class TransactionService {
       });
 
       const transferSend = await this.transactionRepository.create({
-        fromAccount: fromAccount,
-        toAccount: toAccount,
+        fromAccount: fromAccountName.name,
+        toAccount: toAccountName.name,
         amount,
         userId: toAccountData.userId,
         type: 'transferReceived',
