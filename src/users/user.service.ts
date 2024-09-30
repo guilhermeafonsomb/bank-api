@@ -1,4 +1,8 @@
-import { Injectable, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  ConflictException,
+  BadRequestException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { User } from './entities/user.entity';
 import { UserRepository } from './user.repository';
@@ -13,14 +17,22 @@ export class UserService {
       throw new ConflictException('CPF já cadastrado');
     }
 
-    const newUser = new User();
-    newUser.name = createUserDto.name;
-    newUser.cpf = createUserDto.cpf;
+    try {
+      const newUser = new User();
+      newUser.name = createUserDto.name;
+      newUser.cpf = createUserDto.cpf;
 
-    return this.userRepository.create(newUser);
+      return await this.userRepository.create(newUser);
+    } catch (error: unknown) {
+      throw new BadRequestException('Erro ao criar o usuário');
+    }
   }
 
   async findAll() {
-    return this.userRepository.findAll();
+    try {
+      return await this.userRepository.findAll();
+    } catch (error: unknown) {
+      throw new BadRequestException('Erro ao buscar usuários');
+    }
   }
 }

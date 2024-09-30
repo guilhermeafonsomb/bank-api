@@ -22,7 +22,11 @@ export class AccountService {
   }
 
   async addBalance(id: string, amount: number): Promise<Account> {
-    return this.accountRepository.addBalance(id, amount);
+    try {
+      return await this.accountRepository.addBalance(id, amount);
+    } catch (error: unknown) {
+      throw new BadRequestException('Erro ao adicionar saldo à conta.');
+    }
   }
 
   async findAccountByName(accountName: string): Promise<AccountByName | null> {
@@ -37,31 +41,59 @@ export class AccountService {
 
   async withdraw(id: string, amount: number): Promise<Account> {
     const account = await this.accountRepository.findById(id);
+    if (!account) {
+      throw new BadRequestException('Conta não encontrada');
+    }
+
     if (account.balance < amount) {
       throw new BadRequestException('Saldo insuficiente para saque');
     }
-    return this.accountRepository.withdraw(id, amount);
+
+    try {
+      return await this.accountRepository.withdraw(id, amount);
+    } catch (error: unknown) {
+      throw new BadRequestException('Erro ao realizar saque.');
+    }
   }
 
   async findAllByUser(userId: string): Promise<Account[]> {
-    return this.accountRepository.findByUserId(userId);
+    try {
+      return await this.accountRepository.findByUserId(userId);
+    } catch (error: unknown) {
+      throw new BadRequestException('Erro ao buscar contas do usuário.');
+    }
   }
 
   async editAccount(accountId: string, accountName: string): Promise<Account> {
-    return await this.accountRepository.editAccount(accountId, accountName);
+    const account = await this.accountRepository.findById(accountId);
+    if (!account) {
+      throw new BadRequestException('Conta não encontrada');
+    }
+
+    try {
+      return await this.accountRepository.editAccount(accountId, accountName);
+    } catch (error: unknown) {
+      throw new BadRequestException('Erro ao editar a conta.');
+    }
   }
 
   async deleteAccount(accountId: string): Promise<Account> {
-    const account = await await this.accountRepository.findById(accountId);
+    const account = await this.accountRepository.findById(accountId);
 
     if (!account) {
-      throw new BadRequestException('Account not found');
+      throw new BadRequestException('Conta não encontrada');
     }
 
     if (account.balance > 0) {
-      throw new BadRequestException('Account need have balance equal to 0');
+      throw new BadRequestException(
+        'A conta precisa ter saldo igual a 0 para ser deletada.',
+      );
     }
 
-    return await this.accountRepository.deleteAccount(accountId);
+    try {
+      return await this.accountRepository.deleteAccount(accountId);
+    } catch (error: unknown) {
+      throw new BadRequestException('Erro ao deletar a conta.');
+    }
   }
 }

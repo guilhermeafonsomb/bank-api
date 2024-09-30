@@ -96,7 +96,7 @@ export class TransactionRepository {
 
         return {
           id: transaction.id,
-          fromAccountName: fromAccountName?.name,
+          fromAccountName: fromAccountName?.name || null,
           toAccountName: toAccountName?.name || null,
           amount: transaction.amount,
           createdAt: transaction.createdAt,
